@@ -44,14 +44,14 @@ const getData = async () => {
 
 main = async () => {
     const text = document.getElementById('main')
-    text.innerHTML = 'Something';
+    const buttons = document.getElementById('buttons');
+    buttons.setAttribute('hidden','');
+    text.innerHTML = `<i class="fab fa-empire fa-2x fa-spin"></i> Please Wait while your data is loading... <i class="fab fa-empire fa-2x fa-spin"></i>`;
     let dataFromAPI = await getData();
     let planetData = dataFromAPI[0];
     let peopleData = dataFromAPI[1];
-    text.innerHTML = 'Loaded';
-    console.log(dataFromAPI);
-    console.log(planetData);
-    console.log(peopleData);
+    buttons.removeAttribute('hidden');
+    
 };
 
 main();
