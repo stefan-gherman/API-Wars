@@ -3,6 +3,9 @@
 API WARS
 {% endblock %}
 {% block scripts %}
+<script src="{{url_for('static', filename='scripts/main_page.js')}}" defer>
+
+</script>
 {% endblock %}
 
 <body>
@@ -39,7 +42,7 @@ API WARS
         <button type="button" class="btn btn-lg btn-primary" disabled>Previous</button>
         <button type="button" class="btn btn-lg btn-primary" >Next</button>
         </div>
-         <div class="col-md-12  text-center">
+         <div class="col-md-12  text-center" id="main">
              Inner Text
          </div>
     </div>
