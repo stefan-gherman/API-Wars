@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+Log In
+{% endblock %}
+
+
+<body>
+
+{% block body %}
+<div class="container  ">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-4  text-center">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Welcome</h2>
+                    <h3 class="card-subtitle text-muted">Login to your account</h3>
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text"  class="form-control" id="username" title="username" name="username">
+                        <label for="pass">Password</label>
+                        <input type="password"  class="form-control" id="pass" title="pass" name="pass">
+                    </div>
+                    <button class="btn btn-outline-dark ">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+</body>
