@@ -15,14 +15,15 @@ Log In
                 <div class="card-body">
                     <h2 class="card-title">Welcome</h2>
                     <h3 class="card-subtitle text-muted">Login to your account</h3>
-
+                    <form action = '/login' method="post">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text"  class="form-control" id="username" title="username" name="username">
+                        <input type="text"  class="form-control" id="username" title="username" name="username" required>
                         <label for="pass">Password</label>
-                        <input type="password"  class="form-control" id="pass" title="pass" name="pass">
+                        <input type="password"  class="form-control" id="pass" title="pass" name="pass" required>
                     </div>
-                    <button class="btn btn-outline-dark ">Login</button>
+                    <button class="btn btn-outline-dark " type="submit">Login</button>
+                    </form>
                 </div>
             </div>
         </div>
