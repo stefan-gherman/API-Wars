@@ -1,3 +1,4 @@
+
 .col-md-4 {
     margin-top: 20%;
 }
@@ -14,3 +15,15 @@ body {
         border-color: gray;
         box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(108, 122, 137, 0.5);
     }
+
+.navbar {
+    border-width: 3px;
+}
+.starwars {
+  font-family: 'Righteous', cursive;
+    color: black;
+}
+.btn-primary {
+    background-color: #11557C;
+    font-size: 18px;
+}
