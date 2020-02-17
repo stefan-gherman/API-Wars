@@ -30,3 +30,24 @@ def add_user(cursor, username, password):
         )
     else:
         return False
+
+
+@db_connection.connection_handler
+def login_user(cursor, username, password):
+    cursor.execute(
+        sql.SQL('SELECT {usrnam}, {password} from {userbase} WHERE {usrnam} = (%s) ;')
+            .format(
+            userbase=sql.Identifier('userbase'),
+            usrnam=sql.Identifier('username'),
+            password=sql.Identifier('password')
+        ), [username]
+    )
+
+    result = cursor.fetchall()
+    print(result[0]['password'])
+    hashed_pw = result[0]['password']
+
+    if utils.check_hashed_password(hashed_pw, password):
+        return True
+    else:
+        return False
