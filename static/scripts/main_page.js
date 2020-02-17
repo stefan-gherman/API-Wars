@@ -62,8 +62,9 @@ main = async () => {
     }
 
     const planetsTableBody = document.createElement('tbody');
-
-    for (let i = 0; i < planetData.length; i++) {
+    sessionStorage.min_index = JSON.stringify(0);
+    sessionStorage.max_index = JSON.stringify(10);
+    for (let i = 0; i < 10; i++) {
         const newRow = document.createElement('tr');
         let newCell = document.createElement('td');
 
@@ -124,7 +125,181 @@ main = async () => {
     text.innerText = '';
     text.appendChild(planetsTable);
 
+    const next = document.getElementById('next');
+    const prev = document.getElementById('prev');
 
+    next.addEventListener('click', function (event) {
+
+        prev.removeAttribute('disabled');
+        let min_index = JSON.parse(sessionStorage.min_index);
+        let max_index = JSON.parse(sessionStorage.max_index);
+        let noPlanets = parseInt(sessionStorage.numberOfPlanets);
+        if (min_index + 10 < noPlanets) {
+            min_index += 10;
+        } else {
+            min_index = noPlanets;
+        }
+
+        if (max_index + 10 < noPlanets) {
+            max_index += 10;
+        } else {
+            max_index = noPlanets;
+            next.setAttribute('disabled', '');
+        }
+
+        sessionStorage.min_index = JSON.stringify(min_index);
+        sessionStorage.max_index = JSON.stringify(max_index);
+        planetsTable.innerHTML = '';
+        planetsTable.appendChild(planetsTableHeader);
+        planetsTableBody.innerHTML = '';
+        for (let i = min_index; i < max_index; i++) {
+            console.log(planetData.length);
+            const newRow = document.createElement('tr');
+            let newCell = document.createElement('td');
+
+            newCell.innerHTML = planetData[i]['name'];
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            if (planetData[i]['diameter'] != 'unknown') {
+                newCell.innerHTML = planetData[i]['diameter'] + ' km';
+
+            } else {
+                newCell.innerText = planetData[i]['diameter'];
+            }
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            newCell.innerText = planetData[i]['terrain'];
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            if (planetData[i]['surface_water'] != 'unknown') {
+                newCell.innerText = planetData[i]['surface_water'] + '%';
+            } else {
+                newCell.innerText = planetData[i]['surface_water'];
+            }
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            if (planetData[i]['population'] != 'unknown') {
+
+                newCell.innerText = planetData[i]['population'] + ' people';
+            } else {
+                newCell.innerText = planetData[i]['population'];
+            }
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            newCell.innerText = planetData[i]['residents'].length + ' resident(s)';
+            console.log(newCell.innerText);
+            if (newCell.innerText != '0 resident(s)') {
+                const buttonRes = document.createElement('button');
+
+                buttonRes.setAttribute('class', 'btn btn-info my-2');
+                buttonRes.innerText = newCell.innerText;
+                newCell.innerText = '';
+                newCell.appendChild(buttonRes)
+                newRow.appendChild(newCell);
+            } else {
+                newCell = document.createElement('td');
+                newCell.innerText = 'No known residents';
+                newRow.appendChild(newCell);
+            }
+            planetsTableBody.appendChild(newRow);
+        }
+        planetsTable.appendChild(planetsTableBody);
+        text.innerText = '';
+        text.appendChild(planetsTable);
+    });
+    prev.addEventListener('click', function (event) {
+        next.removeAttribute('disabled');
+        let min_index = JSON.parse(sessionStorage.min_index);
+        let max_index = JSON.parse(sessionStorage.max_index);
+        let noPlanets = parseInt(sessionStorage.numberOfPlanets);
+        if (min_index - 10 > 0) {
+
+                min_index -= 10;
+        } else {
+            min_index = 0;
+            prev.setAttribute('disabled', '');
+        }
+
+        if (max_index - 10 > 0) {
+            if (max_index === noPlanets) {
+                max_index = noPlanets - 1;
+            } else {
+                max_index -= 10;
+            }
+        } else {
+            max_index = 0;
+
+        }
+
+        sessionStorage.min_index = JSON.stringify(min_index);
+        sessionStorage.max_index = JSON.stringify(max_index);
+        planetsTable.innerHTML = '';
+        planetsTable.appendChild(planetsTableHeader);
+        planetsTableBody.innerHTML = '';
+        for (let i = min_index; i < max_index; i++) {
+            const newRow = document.createElement('tr');
+            let newCell = document.createElement('td');
+
+            newCell.innerHTML = planetData[i]['name'];
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            if (planetData[i]['diameter'] != 'unknown') {
+                newCell.innerHTML = planetData[i]['diameter'] + ' km';
+
+            } else {
+                newCell.innerText = planetData[i]['diameter'];
+            }
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            newCell.innerText = planetData[i]['terrain'];
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            if (planetData[i]['surface_water'] != 'unknown') {
+                newCell.innerText = planetData[i]['surface_water'] + '%';
+            } else {
+                newCell.innerText = planetData[i]['surface_water'];
+            }
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            if (planetData[i]['population'] != 'unknown') {
+
+                newCell.innerText = planetData[i]['population'] + ' people';
+            } else {
+                newCell.innerText = planetData[i]['population'];
+            }
+            newRow.appendChild(newCell);
+
+            newCell = document.createElement('td');
+            newCell.innerText = planetData[i]['residents'].length + ' resident(s)';
+            console.log(newCell.innerText);
+            if (newCell.innerText != '0 resident(s)') {
+                const buttonRes = document.createElement('button');
+
+                buttonRes.setAttribute('class', 'btn btn-info my-2');
+                buttonRes.innerText = newCell.innerText;
+                newCell.innerText = '';
+                newCell.appendChild(buttonRes)
+                newRow.appendChild(newCell);
+            } else {
+                newCell = document.createElement('td');
+                newCell.innerText = 'No known residents';
+                newRow.appendChild(newCell);
+            }
+            planetsTableBody.appendChild(newRow);
+        }
+        planetsTable.appendChild(planetsTableBody);
+        text.innerText = '';
+        text.appendChild(planetsTable);
+    });
 };
 
 main();
