@@ -14,15 +14,25 @@ Log In
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title">Welcome</h2>
+                    {% if got_from == 'register' %}
+                    <h3 class="card-subtitle text-muted">Register a new account</h3>
+                    {% else %}
                     <h3 class="card-subtitle text-muted">Login to your account</h3>
-                    <form action = '/login' method="post">
+                    {% endif %}
+                    {% if problem == 'user_exists' %}
+                     <h3 class="card-subtitle text-alert"><span style="color:red; font-size: 18px"> Username already exists!</span></h3>
+                    {% endif %}
+                    {% if problem == 'wrong_cred' %}
+                     <h3 class="card-subtitle text-alert"><span style="color:red; font-size: 18px"> Username or password are wrong!</span></h3>
+                    {% endif %}
+                    <form {% if got_from=='register' %} action = '/register' {% else %} action = '/login' {% endif %} method="post">
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text"  class="form-control" id="username" title="username" name="username" required>
+                        <input type="text" class="form-control" id="username" title="username" name="username" required>
                         <label for="pass">Password</label>
-                        <input type="password"  class="form-control" id="pass" title="pass" name="pass" required>
+                        <input type="password" class="form-control" id="pass" title="pass" name="pass" required>
                     </div>
-                    <button class="btn btn-outline-dark " type="submit">Login</button>
+                    <button class="btn btn-outline-dark " type="submit">{% if got_from=='register' %}Register {% else %} Login {% endif %}</button>
                     </form>
                 </div>
             </div>
