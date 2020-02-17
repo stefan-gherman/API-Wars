@@ -50,6 +50,12 @@ main = async () => {
     let dataFromAPI = await getData();
     let planetData = dataFromAPI[0];
     let peopleData = dataFromAPI[1];
+    let linkPeople = {};
+
+    for (let i = 0; i < peopleData.length; i++) {
+        linkPeople['https://swapi.co/api/people/' + (i + 1).toString() + '/'] = peopleData[i]
+    }
+    console.log('Link people', linkPeople);
     buttons.removeAttribute('hidden');
     const planetsTable = document.createElement('table');
     planetsTable.setAttribute('class', 'table table-sm table-bordered justify-content-center mt-3')
@@ -60,8 +66,17 @@ main = async () => {
         newHeader.innerText = val;
         planetsTableHeader.appendChild(newHeader);
     }
-
+    const planetsResidents = document.createElement('table');
+    planetsResidents.setAttribute('class', 'table table-sm table-bordered justify-content-center mt-3')
+    const planetsResidentsTableHeader = document.createElement('thead');
+    let valsResidents = ['Name', 'Height', 'Mass', 'Hair Color', 'Skin Color', 'Eye Color', 'Birth Year', 'Gender'];
+    for (let val of valsResidents) {
+        const newHeader = document.createElement('th');
+        newHeader.innerText = val;
+        planetsResidentsTableHeader.appendChild(newHeader);
+    }
     const planetsTableBody = document.createElement('tbody');
+    const planetsResidentsTableBody = document.createElement('tbody');
     sessionStorage.min_index = JSON.stringify(0);
     sessionStorage.max_index = JSON.stringify(10);
     for (let i = 0; i < 10; i++) {
@@ -108,10 +123,65 @@ main = async () => {
             const buttonRes = document.createElement('button');
 
             buttonRes.setAttribute('class', 'btn btn-info my-2');
+            buttonRes.setAttribute('data-toggle', 'modal');
+            buttonRes.setAttribute('data-target', '#planetModal');
+
             buttonRes.innerText = newCell.innerText;
             newCell.innerText = '';
-            newCell.appendChild(buttonRes)
+            newCell.appendChild(buttonRes);
             newRow.appendChild(newCell);
+            buttonRes.addEventListener('click', function (event) {
+                let planetHead = document.getElementById('planetHead');
+                planetHead.innerText = planetData[i]['name'] + ' residents';
+                let planetBody = document.getElementById('planetBody');
+                planetBody.innerText = '';
+                planetsResidents.innerText = ' ';
+                planetsResidentsTableBody.innerText = '';
+
+                for (let elem of planetData[i]['residents']) {
+                    const newRow = document.createElement('tr');
+                    let newCell = document.createElement('td');
+
+                    newCell.innerText = linkPeople[elem]['name'];
+                    newRow.appendChild(newCell);
+
+                    newCell = document.createElement('td');
+                    newCell.innerText = linkPeople[elem]['height'];
+                    newRow.appendChild(newCell);
+
+                    newCell = document.createElement('td');
+                    newCell.innerText = linkPeople[elem]['mass'];
+                    newRow.appendChild(newCell);
+
+
+                    newCell = document.createElement('td');
+                    newCell.innerText = linkPeople[elem]['hair_color'];
+                    newRow.appendChild(newCell);
+
+                    newCell = document.createElement('td');
+                    newCell.innerText = linkPeople[elem]['skin_color'];
+                    newRow.appendChild(newCell);
+
+                    newCell = document.createElement('td');
+                    newCell.innerText = linkPeople[elem]['eye_color'];
+                    newRow.appendChild(newCell);
+
+                    newCell = document.createElement('td');
+                    newCell.innerText = linkPeople[elem]['birth_year'];
+                    newRow.appendChild(newCell);
+
+                    newCell = document.createElement('td');
+                    newCell.innerText = linkPeople[elem]['gender'];
+                    newRow.appendChild(newCell);
+
+
+                    planetsResidentsTableBody.appendChild(newRow)
+
+                }
+                planetsResidents.appendChild(planetsResidentsTableHeader);
+                planetsResidents.appendChild(planetsResidentsTableBody);
+                planetBody.appendChild(planetsResidents);
+            })
         } else {
             newCell = document.createElement('td');
             newCell.innerText = 'No known residents';
@@ -197,10 +267,65 @@ main = async () => {
                 const buttonRes = document.createElement('button');
 
                 buttonRes.setAttribute('class', 'btn btn-info my-2');
+                buttonRes.setAttribute('data-toggle', 'modal');
+                buttonRes.setAttribute('data-target', '#planetModal');
+
                 buttonRes.innerText = newCell.innerText;
                 newCell.innerText = '';
                 newCell.appendChild(buttonRes)
                 newRow.appendChild(newCell);
+                buttonRes.addEventListener('click', function (event) {
+                    let planetHead = document.getElementById('planetHead');
+                    planetHead.innerText = planetData[i]['name'] + ' residents';
+                    let planetBody = document.getElementById('planetBody');
+                    planetBody.innerText = '';
+                    planetsResidents.innerText = ' ';
+                    planetsResidentsTableBody.innerText = '';
+
+                    for (let elem of planetData[i]['residents']) {
+                        const newRow = document.createElement('tr');
+                        let newCell = document.createElement('td');
+
+                        newCell.innerText = linkPeople[elem]['name'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['height'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['mass'];
+                        newRow.appendChild(newCell);
+
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['hair_color'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['skin_color'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['eye_color'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['birth_year'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['gender'];
+                        newRow.appendChild(newCell);
+
+
+                        planetsResidentsTableBody.appendChild(newRow)
+
+                    }
+                    planetsResidents.appendChild(planetsResidentsTableHeader);
+                    planetsResidents.appendChild(planetsResidentsTableBody);
+                    planetBody.appendChild(planetsResidents);
+                })
             } else {
                 newCell = document.createElement('td');
                 newCell.innerText = 'No known residents';
@@ -219,7 +344,7 @@ main = async () => {
         let noPlanets = parseInt(sessionStorage.numberOfPlanets);
         if (min_index - 10 > 0) {
 
-                min_index -= 10;
+            min_index -= 10;
         } else {
             min_index = 0;
             prev.setAttribute('disabled', '');
@@ -285,10 +410,65 @@ main = async () => {
                 const buttonRes = document.createElement('button');
 
                 buttonRes.setAttribute('class', 'btn btn-info my-2');
+                buttonRes.setAttribute('data-toggle', 'modal');
+                buttonRes.setAttribute('data-target', '#planetModal');
+
                 buttonRes.innerText = newCell.innerText;
                 newCell.innerText = '';
                 newCell.appendChild(buttonRes)
                 newRow.appendChild(newCell);
+                buttonRes.addEventListener('click', function (event) {
+                    let planetHead = document.getElementById('planetHead');
+                    planetHead.innerText = planetData[i]['name'] + ' residents';
+                    let planetBody = document.getElementById('planetBody');
+                    planetBody.innerText = '';
+                    planetsResidents.innerText = ' ';
+                    planetsResidentsTableBody.innerText = '';
+
+                    for (let elem of planetData[i]['residents']) {
+                        const newRow = document.createElement('tr');
+                        let newCell = document.createElement('td');
+
+                        newCell.innerText = linkPeople[elem]['name'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['height'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['mass'];
+                        newRow.appendChild(newCell);
+
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['hair_color'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['skin_color'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['eye_color'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['birth_year'];
+                        newRow.appendChild(newCell);
+
+                        newCell = document.createElement('td');
+                        newCell.innerText = linkPeople[elem]['gender'];
+                        newRow.appendChild(newCell);
+
+
+                        planetsResidentsTableBody.appendChild(newRow)
+
+                    }
+                    planetsResidents.appendChild(planetsResidentsTableHeader);
+                    planetsResidents.appendChild(planetsResidentsTableBody);
+                    planetBody.appendChild(planetsResidents);
+                })
             } else {
                 newCell = document.createElement('td');
                 newCell.innerText = 'No known residents';
