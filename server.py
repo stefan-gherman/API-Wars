@@ -43,6 +43,7 @@ def login():
 
     if queries.login_user(username, password) is True:
         session['username'] = username
+        session['id'] = queries.return_user_id(username)
         return redirect(url_for('home'))
     else:
         return render_template('login_page.html', got_from='login', problem='wrong_cred')
