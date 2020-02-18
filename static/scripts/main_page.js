@@ -79,13 +79,16 @@ main = async () => {
     const planetsResidentsTableBody = document.createElement('tbody');
     sessionStorage.min_index = JSON.stringify(0);
     sessionStorage.max_index = JSON.stringify(10);
+    for (let i = 0; i < parseInt(sessionStorage.numberOfPlanets); i++) {
+        planetData[i]['id'] = i;
+    }
     for (let i = 0; i < 10; i++) {
+
         const newRow = document.createElement('tr');
         let newCell = document.createElement('td');
 
         newCell.innerHTML = planetData[i]['name'];
         newRow.appendChild(newCell);
-
         newCell = document.createElement('td');
         if (planetData[i]['diameter'] != 'unknown') {
             newCell.innerHTML = planetData[i]['diameter'] + ' km';
