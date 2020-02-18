@@ -43,6 +43,57 @@ const getData = async () => {
 };
 
 main = async () => {
+    const user = document.getElementById('user');
+    let logged;
+    if (user != null) {
+        logged = user.dataset.user;
+        console.log(logged);
+    }
+
+    const voting_stats = document.getElementById('user_return');
+
+    voting_stats.addEventListener('click', async function (event) {
+
+        let votes = await fetch(`${window.origin}/vote_stats`);
+        votes = await votes.json();
+        const resBody = document.getElementById('ResBody');
+        resBody.innerText = '';
+        const resTable = document.createElement('table');
+        resTable.setAttribute('class', 'table table-sm table-bordered justify-content-center mt-3');
+        const resTableHead = document.createElement('thead');
+        const resTableBody = document.createElement('tbody');
+
+        const resTableHeader1 = document.createElement('th');
+        resTableHeader1.innerText = 'Planet';
+        const resTableHeader2 = document.createElement('th');
+        resTableHeader2.innerText = 'Votes';
+
+        resTableHead.append(resTableHeader1, resTableHeader2);
+
+
+        let planetCell = document.createElement('td');
+
+
+        for (let i =0; i < votes.length; i++) {
+
+            const planetRow = document.createElement('tr');
+            planetCell = document.createElement('td');
+            planetCell.innerHTML = votes[i]['planet_name'];
+            planetRow.appendChild(planetCell);
+
+            planetCell = document.createElement('td');
+            planetCell.innerHTML = votes[i]['votes'];
+            planetRow.appendChild(planetCell);
+
+
+            resTableBody.appendChild(planetRow)
+        }
+        resTable.appendChild(resTableHead);
+        resTable.appendChild(resTableBody);
+
+        resBody.appendChild(resTable);
+
+    });
     const text = document.getElementById('main')
     const buttons = document.getElementById('buttons');
     buttons.setAttribute('hidden', '');
