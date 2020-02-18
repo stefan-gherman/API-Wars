@@ -10,7 +10,7 @@ app.secret_key = os.urandom((20))
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if 'username' in session:
-        return render_template('main_page.html', logged_in=session['username'])
+        return render_template('main_page.html', logged_in=session['username'], user_id=session['id'])
     else:
         return render_template('main_page.html', show_register='show')
 
