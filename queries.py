@@ -50,3 +50,19 @@ def login_user(cursor, username, password):
         return True
     else:
         return False
+
+
+@db_connection.connection_handler
+def return_users(cursor):
+    cursor.execute(
+        sql.SQL('SELECT {usrnam} FROM {userbase};')
+            .format(
+            usrnam=sql.Identifier('username'),
+            userbase=sql.Identifier('userbase')
+        ), []
+    )
+
+    query_result = cursor.fetchall()
+
+    return query_result
+
