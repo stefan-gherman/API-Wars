@@ -72,6 +72,11 @@ def vote():
 
     return make_response('OK', 200)
 
+
+@app.route('/vote_stats')
+def return_vote_stats():
+    results = queries.vote_statistics()
+    response = make_response(jsonify(results), 200)
     return response
 
 
