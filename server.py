@@ -60,7 +60,18 @@ def return_users():
     users = queries.return_users()
     print(users)
 
-    response = make_response(jsonify(users), 200)
+@app.route('/vote', methods=['POST'])
+def vote():
+    req = request.get_json()
+
+    user_id = int(req['user_id'])
+    planet_id = int(req['planet_id'])
+    planet_name = req['planet_name']
+
+    queries.add_vote(user_id, planet_id, planet_name)
+
+    return make_response('OK', 200)
+
     return response
 
 
