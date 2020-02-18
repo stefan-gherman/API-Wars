@@ -43,6 +43,57 @@ const getData = async () => {
 };
 
 main = async () => {
+    const user = document.getElementById('user');
+    let logged;
+    if (user != null) {
+        logged = user.dataset.user;
+        console.log(logged);
+    }
+
+    const voting_stats = document.getElementById('user_return');
+
+    voting_stats.addEventListener('click', async function (event) {
+
+        let votes = await fetch(`${window.origin}/vote_stats`);
+        votes = await votes.json();
+        const resBody = document.getElementById('ResBody');
+        resBody.innerText = '';
+        const resTable = document.createElement('table');
+        resTable.setAttribute('class', 'table table-sm table-bordered justify-content-center mt-3');
+        const resTableHead = document.createElement('thead');
+        const resTableBody = document.createElement('tbody');
+
+        const resTableHeader1 = document.createElement('th');
+        resTableHeader1.innerText = 'Planet';
+        const resTableHeader2 = document.createElement('th');
+        resTableHeader2.innerText = 'Votes';
+
+        resTableHead.append(resTableHeader1, resTableHeader2);
+
+
+        let planetCell = document.createElement('td');
+
+
+        for (let i =0; i < votes.length; i++) {
+
+            const planetRow = document.createElement('tr');
+            planetCell = document.createElement('td');
+            planetCell.innerHTML = votes[i]['planet_name'];
+            planetRow.appendChild(planetCell);
+
+            planetCell = document.createElement('td');
+            planetCell.innerHTML = votes[i]['votes'];
+            planetRow.appendChild(planetCell);
+
+
+            resTableBody.appendChild(planetRow)
+        }
+        resTable.appendChild(resTableHead);
+        resTable.appendChild(resTableBody);
+
+        resBody.appendChild(resTable);
+
+    });
     const text = document.getElementById('main')
     const buttons = document.getElementById('buttons');
     buttons.setAttribute('hidden', '');
@@ -60,7 +111,14 @@ main = async () => {
     const planetsTable = document.createElement('table');
     planetsTable.setAttribute('class', 'table table-sm table-bordered justify-content-center mt-3')
     const planetsTableHeader = document.createElement('thead');
-    let vals = ['Name', 'Diameter', 'Terrain', 'Surface Water Percentage', 'Population', 'Residents'];
+    let vals = [];
+    if (user != null) {
+        vals = ['Name', 'Diameter', 'Terrain', 'Surface Water Percentage', 'Population', 'Residents', 'Vote'];
+    } else {
+        vals = ['Name', 'Diameter', 'Terrain', 'Surface Water Percentage', 'Population', 'Residents'];
+    }
+
+
     for (let val of vals) {
         const newHeader = document.createElement('th');
         newHeader.innerText = val;
@@ -79,13 +137,16 @@ main = async () => {
     const planetsResidentsTableBody = document.createElement('tbody');
     sessionStorage.min_index = JSON.stringify(0);
     sessionStorage.max_index = JSON.stringify(10);
+    for (let i = 0; i < parseInt(sessionStorage.numberOfPlanets); i++) {
+        planetData[i]['id'] = i;
+    }
     for (let i = 0; i < 10; i++) {
+
         const newRow = document.createElement('tr');
         let newCell = document.createElement('td');
 
         newCell.innerHTML = planetData[i]['name'];
         newRow.appendChild(newCell);
-
         newCell = document.createElement('td');
         if (planetData[i]['diameter'] != 'unknown') {
             newCell.innerHTML = planetData[i]['diameter'] + ' km';
@@ -185,6 +246,36 @@ main = async () => {
         } else {
             newCell = document.createElement('td');
             newCell.innerText = 'No known residents';
+            newRow.appendChild(newCell);
+        }
+        if (user != null) {
+            newCell = document.createElement('td');
+            newCell.innerText = 'Vote';
+            const buttonVote = document.createElement('button');
+
+            buttonVote.setAttribute('class', 'btn btn-warning my-2');
+            buttonVote.setAttribute('data-toggle', 'modal');
+            buttonVote.setAttribute('data-target', '#VoteModal');
+
+            buttonVote.innerText = newCell.innerText;
+            newCell.innerText = '';
+            newCell.appendChild(buttonVote);
+            buttonVote.addEventListener('click', function (event) {
+                const dataToSend = {
+                    user_id: logged,
+                    planet_id: planetData[i]['id'],
+                    planet_name: planetData[i]['name']
+                }
+                fetch(`${window.origin}/vote`,{
+                    method: 'POST',
+                    credentials: "include",
+                    cache: "no-cache",
+                    headers: new Headers({
+                        'content-type':'application/json'
+                    }),
+                    body: JSON.stringify(dataToSend)
+                });
+            });
             newRow.appendChild(newCell);
         }
         planetsTableBody.appendChild(newRow);
@@ -331,6 +422,36 @@ main = async () => {
                 newCell.innerText = 'No known residents';
                 newRow.appendChild(newCell);
             }
+             if (user != null) {
+            newCell = document.createElement('td');
+            newCell.innerText = 'Vote';
+            const buttonVote = document.createElement('button');
+
+            buttonVote.setAttribute('class', 'btn btn-warning my-2');
+            buttonVote.setAttribute('data-toggle', 'modal');
+            buttonVote.setAttribute('data-target', '#VoteModal');
+
+            buttonVote.innerText = newCell.innerText;
+            newCell.innerText = '';
+            newCell.appendChild(buttonVote);
+            buttonVote.addEventListener('click', function (event) {
+                const dataToSend = {
+                    user_id: logged,
+                    planet_id: planetData[i]['id'],
+                    planet_name: planetData[i]['name']
+                }
+                fetch(`${window.origin}/vote`,{
+                    method: 'POST',
+                    credentials: "include",
+                    cache: "no-cache",
+                    headers: new Headers({
+                        'content-type':'application/json'
+                    }),
+                    body: JSON.stringify(dataToSend)
+                });
+            });
+            newRow.appendChild(newCell);
+        }
             planetsTableBody.appendChild(newRow);
         }
         planetsTable.appendChild(planetsTableBody);
@@ -474,12 +595,44 @@ main = async () => {
                 newCell.innerText = 'No known residents';
                 newRow.appendChild(newCell);
             }
+             if (user != null) {
+            newCell = document.createElement('td');
+            newCell.innerText = 'Vote';
+            const buttonVote = document.createElement('button');
+
+            buttonVote.setAttribute('class', 'btn btn-warning my-2');
+            buttonVote.setAttribute('data-toggle', 'modal');
+            buttonVote.setAttribute('data-target', '#VoteModal');
+
+            buttonVote.innerText = newCell.innerText;
+            newCell.innerText = '';
+            newCell.appendChild(buttonVote);
+            buttonVote.addEventListener('click', function (event) {
+                const dataToSend = {
+                    user_id: logged,
+                    planet_id: planetData[i]['id'],
+                    planet_name: planetData[i]['name']
+                }
+                fetch(`${window.origin}/vote`,{
+                    method: 'POST',
+                    credentials: "include",
+                    cache: "no-cache",
+                    headers: new Headers({
+                        'content-type':'application/json'
+                    }),
+                    body: JSON.stringify(dataToSend)
+                });
+            });
+            newRow.appendChild(newCell);
+        }
             planetsTableBody.appendChild(newRow);
         }
         planetsTable.appendChild(planetsTableBody);
         text.innerText = '';
         text.appendChild(planetsTable);
     });
+
+
 };
 
 main();

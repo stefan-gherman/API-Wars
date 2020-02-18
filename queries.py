@@ -44,10 +44,68 @@ def login_user(cursor, username, password):
     )
 
     result = cursor.fetchall()
-    print(result[0]['password'])
     hashed_pw = result[0]['password']
 
     if utils.check_hashed_password(hashed_pw, password):
         return True
     else:
         return False
+
+
+@db_connection.connection_handler
+def return_users(cursor):
+    cursor.execute(
+        sql.SQL('SELECT {usrnam} FROM {userbase};')
+            .format(
+            usrnam=sql.Identifier('username'),
+            userbase=sql.Identifier('userbase')
+        ), []
+    )
+
+    query_result = cursor.fetchall()
+
+    return query_result
+
+
+@db_connection.connection_handler
+def return_user_id(cursor, username):
+    cursor.execute(
+        sql.SQL('SELECT {id} FROM {userbase} WHERE {usrnam} = (%s);')
+            .format(
+            id=sql.Identifier('id'),
+            userbase=sql.Identifier('userbase'),
+            usrnam=sql.Identifier('username')
+        ), [username]
+    )
+
+    query_result = cursor.fetchall()
+    id_usr = query_result[0]['id']
+    return id_usr
+
+
+@db_connection.connection_handler
+def add_vote(cursor, user_id, planet_id, planet_name):
+    cursor.execute(
+        sql.SQL('INSERT INTO  {planet_votes} ({planet_id},{planet_name},{user_id}) VALUES (%s, %s, %s);')
+            .format(
+            planet_votes=sql.Identifier('planet_votes'),
+            planet_id=sql.Identifier('planet_id'),
+            planet_name=sql.Identifier('planet_name'),
+            user_id=sql.Identifier('user_id')
+        ), [planet_id, planet_name, user_id]
+    )
+
+
+@db_connection.connection_handler
+def vote_statistics(cursor):
+    cursor.execute(
+        sql.SQL(
+            'SELECT {planet_name}, count({planet_name}) as votes FROM {planet_votes} GROUP BY {planet_name} ORDER BY votes DESC ;')
+            .format(
+            planet_name=sql.Identifier('planet_name'),
+            planet_votes=sql.Identifier('planet_votes')
+        ), []
+    )
+
+    query_result = cursor.fetchall()
+    return query_result

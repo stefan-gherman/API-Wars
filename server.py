@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, session, render_template
+from flask import Flask, request, redirect, url_for, session, render_template, make_response, jsonify
 import queries
 import os
 
@@ -10,9 +10,9 @@ app.secret_key = os.urandom((20))
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if 'username' in session:
-        return render_template('main_page.html', logged_in=session['username'])
+        return render_template('main_page.html', logged_in=session['username'], user_id=session['id'])
     else:
-        return render_template('main_page.html', show_register = 'show')
+        return render_template('main_page.html', show_register='show')
 
 
 @app.route('/login_page')
@@ -43,13 +43,42 @@ def login():
 
     if queries.login_user(username, password) is True:
         session['username'] = username
+        session['id'] = queries.return_user_id(username)
         return redirect(url_for('home'))
     else:
         return render_template('login_page.html', got_from='login', problem='wrong_cred')
+
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('home'))
+
+
+@app.route('/print_users', methods=['GET', 'POST'])
+def return_users():
+    users = queries.return_users()
+    print(users)
+
+@app.route('/vote', methods=['POST'])
+def vote():
+    req = request.get_json()
+
+    user_id = int(req['user_id'])
+    planet_id = int(req['planet_id'])
+    planet_name = req['planet_name']
+
+    queries.add_vote(user_id, planet_id, planet_name)
+
+    return make_response('OK', 200)
+
+
+@app.route('/vote_stats')
+def return_vote_stats():
+    results = queries.vote_statistics()
+    response = make_response(jsonify(results), 200)
+    return response
+
 
 if __name__ == '__main__':
     app.run(debug=True)
