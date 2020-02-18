@@ -82,3 +82,16 @@ def return_user_id(cursor, username):
     id_usr = query_result[0]['id']
     return id_usr
 
+
+@db_connection.connection_handler
+def add_vote(cursor, user_id, planet_id, planet_name):
+    cursor.execute(
+        sql.SQL('INSERT INTO  {planet_votes} ({planet_id},{planet_name},{user_id}) VALUES (%s, %s, %s);')
+            .format(
+            planet_votes=sql.Identifier('planet_votes'),
+            planet_id=sql.Identifier('planet_id'),
+            planet_name=sql.Identifier('planet_name'),
+            user_id=sql.Identifier('user_id')
+        ), [planet_id, planet_name, user_id]
+    )
+
