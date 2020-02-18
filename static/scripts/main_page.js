@@ -187,6 +187,36 @@ main = async () => {
             newCell.innerText = 'No known residents';
             newRow.appendChild(newCell);
         }
+        if (user != null) {
+            newCell = document.createElement('td');
+            newCell.innerText = 'Vote';
+            const buttonVote = document.createElement('button');
+
+            buttonVote.setAttribute('class', 'btn btn-warning my-2');
+            buttonVote.setAttribute('data-toggle', 'modal');
+            buttonVote.setAttribute('data-target', '#VoteModal');
+
+            buttonVote.innerText = newCell.innerText;
+            newCell.innerText = '';
+            newCell.appendChild(buttonVote);
+            buttonVote.addEventListener('click', function (event) {
+                const dataToSend = {
+                    user_id: logged,
+                    planet_id: planetData[i]['id'],
+                    planet_name: planetData[i]['name']
+                }
+                fetch(`${window.origin}/vote`,{
+                    method: 'POST',
+                    credentials: "include",
+                    cache: "no-cache",
+                    headers: new Headers({
+                        'content-type':'application/json'
+                    }),
+                    body: JSON.stringify(dataToSend)
+                });
+            });
+            newRow.appendChild(newCell);
+        }
         planetsTableBody.appendChild(newRow);
     }
 
@@ -331,6 +361,36 @@ main = async () => {
                 newCell.innerText = 'No known residents';
                 newRow.appendChild(newCell);
             }
+             if (user != null) {
+            newCell = document.createElement('td');
+            newCell.innerText = 'Vote';
+            const buttonVote = document.createElement('button');
+
+            buttonVote.setAttribute('class', 'btn btn-warning my-2');
+            buttonVote.setAttribute('data-toggle', 'modal');
+            buttonVote.setAttribute('data-target', '#VoteModal');
+
+            buttonVote.innerText = newCell.innerText;
+            newCell.innerText = '';
+            newCell.appendChild(buttonVote);
+            buttonVote.addEventListener('click', function (event) {
+                const dataToSend = {
+                    user_id: logged,
+                    planet_id: planetData[i]['id'],
+                    planet_name: planetData[i]['name']
+                }
+                fetch(`${window.origin}/vote`,{
+                    method: 'POST',
+                    credentials: "include",
+                    cache: "no-cache",
+                    headers: new Headers({
+                        'content-type':'application/json'
+                    }),
+                    body: JSON.stringify(dataToSend)
+                });
+            });
+            newRow.appendChild(newCell);
+        }
             planetsTableBody.appendChild(newRow);
         }
         planetsTable.appendChild(planetsTableBody);
@@ -474,12 +534,44 @@ main = async () => {
                 newCell.innerText = 'No known residents';
                 newRow.appendChild(newCell);
             }
+             if (user != null) {
+            newCell = document.createElement('td');
+            newCell.innerText = 'Vote';
+            const buttonVote = document.createElement('button');
+
+            buttonVote.setAttribute('class', 'btn btn-warning my-2');
+            buttonVote.setAttribute('data-toggle', 'modal');
+            buttonVote.setAttribute('data-target', '#VoteModal');
+
+            buttonVote.innerText = newCell.innerText;
+            newCell.innerText = '';
+            newCell.appendChild(buttonVote);
+            buttonVote.addEventListener('click', function (event) {
+                const dataToSend = {
+                    user_id: logged,
+                    planet_id: planetData[i]['id'],
+                    planet_name: planetData[i]['name']
+                }
+                fetch(`${window.origin}/vote`,{
+                    method: 'POST',
+                    credentials: "include",
+                    cache: "no-cache",
+                    headers: new Headers({
+                        'content-type':'application/json'
+                    }),
+                    body: JSON.stringify(dataToSend)
+                });
+            });
+            newRow.appendChild(newCell);
+        }
             planetsTableBody.appendChild(newRow);
         }
         planetsTable.appendChild(planetsTableBody);
         text.innerText = '';
         text.appendChild(planetsTable);
     });
+
+
 };
 
 main();
