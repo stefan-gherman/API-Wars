@@ -60,7 +60,14 @@ main = async () => {
     const planetsTable = document.createElement('table');
     planetsTable.setAttribute('class', 'table table-sm table-bordered justify-content-center mt-3')
     const planetsTableHeader = document.createElement('thead');
-    let vals = ['Name', 'Diameter', 'Terrain', 'Surface Water Percentage', 'Population', 'Residents'];
+    let vals = [];
+    if (user != null) {
+        vals = ['Name', 'Diameter', 'Terrain', 'Surface Water Percentage', 'Population', 'Residents', 'Vote'];
+    } else {
+        vals = ['Name', 'Diameter', 'Terrain', 'Surface Water Percentage', 'Population', 'Residents'];
+    }
+
+
     for (let val of vals) {
         const newHeader = document.createElement('th');
         newHeader.innerText = val;
