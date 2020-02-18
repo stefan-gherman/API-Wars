@@ -95,3 +95,17 @@ def add_vote(cursor, user_id, planet_id, planet_name):
         ), [planet_id, planet_name, user_id]
     )
 
+
+@db_connection.connection_handler
+def vote_statistics(cursor):
+    cursor.execute(
+        sql.SQL(
+            'SELECT {planet_name}, count({planet_name}) as votes FROM {planet_votes} GROUP BY {planet_name} ORDER BY votes DESC ;')
+            .format(
+            planet_name=sql.Identifier('planet_name'),
+            planet_votes=sql.Identifier('planet_votes')
+        ), []
+    )
+
+    query_result = cursor.fetchall()
+    return query_result
