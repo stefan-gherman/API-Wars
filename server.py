@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, session, render_template
+from flask import Flask, request, redirect, url_for, session, render_template, make_response, jsonify
 import queries
 import os
 
@@ -12,7 +12,7 @@ def home():
     if 'username' in session:
         return render_template('main_page.html', logged_in=session['username'])
     else:
-        return render_template('main_page.html', show_register = 'show')
+        return render_template('main_page.html', show_register='show')
 
 
 @app.route('/login_page')
@@ -46,10 +46,22 @@ def login():
         return redirect(url_for('home'))
     else:
         return render_template('login_page.html', got_from='login', problem='wrong_cred')
+
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('home'))
+
+
+@app.route('/print_users', methods=['GET', 'POST'])
+def return_users():
+    users = queries.return_users()
+    print(users)
+
+    response = make_response(jsonify(users), 200)
+    return response
+
 
 if __name__ == '__main__':
     app.run(debug=True)
