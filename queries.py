@@ -66,3 +66,19 @@ def return_users(cursor):
 
     return query_result
 
+
+@db_connection.connection_handler
+def return_user_id(cursor, username):
+    cursor.execute(
+        sql.SQL('SELECT {id} FROM {userbase} WHERE {usrnam} = (%s);')
+            .format(
+            id=sql.Identifier('id'),
+            userbase=sql.Identifier('userbase'),
+            usrnam=sql.Identifier('username')
+        ), [username]
+    )
+
+    query_result = cursor.fetchall()
+    id_usr = query_result[0]['id']
+    return id_usr
+
