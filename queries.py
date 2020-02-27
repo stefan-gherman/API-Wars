@@ -44,6 +44,9 @@ def login_user(cursor, username, password):
     )
 
     result = cursor.fetchall()
+
+    if len(result) == 0:
+        return None
     hashed_pw = result[0]['password']
 
     if utils.check_hashed_password(hashed_pw, password):

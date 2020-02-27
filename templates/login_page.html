@@ -25,6 +25,9 @@ Log In
                     {% if problem == 'wrong_cred' %}
                      <h3 class="card-subtitle text-alert"><span style="color:red; font-size: 18px"> Username or password are wrong!</span></h3>
                     {% endif %}
+                     {% if problem == 'non_existent' %}
+                    <h3 class="card-subtitle text-alert"><span style="color:red; font-size: 18px"> Username does not exist, try <a href="{{url_for('return_register')}}">registering</a> first!</span></h3>
+                    {% endif %}
                     <form {% if got_from=='register' %} action = '/register' {% else %} action = '/login' {% endif %} method="post">
                     <div class="form-group">
                         <label for="username">Username</label>
