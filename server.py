@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-app.secret_key = os.urandom((20))
+app.secret_key = 'ojp[j3qj3iu-32u23utji23ht239ht-392ht8932-u-293u3189-u298-ut23-9th23-9t4389hjt8934-th9-23ht89-23htj2-938ht24-9ht24-t24-tj248t24=tj-24t'
 
 
 @app.route('/', methods=['GET', 'POST'])
