@@ -12,7 +12,7 @@ const getData = async () => {
             let numberOfPeople = parseInt(payload.count);
             sessionStorage.numberOfPlanets = numberOfPlanets;
             sessionStorage.numberOfPeople = numberOfPeople;
-            console.log(numberOfPlanets);
+            // console.log(numberOfPeople);
             for (let i = 1; i <= numberOfPlanets; i++) {
                 const new_response = await fetch('https://swapi.co/api/planets/' + i.toString() + '/', {mode: 'cors'});
                 const payload = await new_response.json()
@@ -23,19 +23,25 @@ const getData = async () => {
                 const payload = await new_response.json()
                 planetPeopleData.push(payload);
             }
+            const checkExtra = await fetch('https://swapi.co/api/people/' + (numberOfPeople+1).toString() + '/', {mode: 'cors'});
+            const payloadExtra = await checkExtra.json();
+
+            if (payloadExtra['detail'] === undefined){
+                planetPeopleData.push(payloadExtra);
+            }
             planetData = planetPeopleData.slice(0, numberOfPlanets);
             peopleData = planetPeopleData.slice(numberOfPlanets);
             sessionStorage.setItem('planetsData', JSON.stringify(planetData));
             sessionStorage.setItem('peoplesData', JSON.stringify(peopleData));
-            console.log('Done');
+            // console.log('Done');
             return ([planetData, peopleData]);
         } catch (error) {
-            console.log('Something went rogue');
+            // console.log('Something went rogue');
         }
     } else {
         planetData = JSON.parse(sessionStorage.getItem('planetsData'));
         peopleData = JSON.parse(sessionStorage.getItem('peoplesData'));
-        console.log('Loaded from sessionStorage');
+        // console.log('Loaded from sessionStorage');
         return ([planetData, peopleData]);
 
     }
@@ -47,7 +53,7 @@ main = async () => {
     let logged;
     if (user != null) {
         logged = user.dataset.user;
-        console.log(logged);
+        // console.log(logged);
     }
 
     const voting_stats = document.getElementById('user_return');
@@ -106,7 +112,7 @@ main = async () => {
     for (let i = 0; i < peopleData.length; i++) {
         linkPeople['https://swapi.co/api/people/' + (i + 1).toString() + '/'] = peopleData[i]
     }
-    console.log('Link people', linkPeople);
+    // console.log('Link people', linkPeople);
     buttons.removeAttribute('hidden');
     const planetsTable = document.createElement('table');
     planetsTable.setAttribute('class', 'table table-sm table-bordered justify-content-center mt-3')
@@ -179,7 +185,7 @@ main = async () => {
 
         newCell = document.createElement('td');
         newCell.innerText = planetData[i]['residents'].length + ' resident(s)';
-        console.log(newCell.innerText);
+        // console.log(newCell.innerText);
         if (newCell.innerText != '0 resident(s)') {
             const buttonRes = document.createElement('button');
 
@@ -200,6 +206,9 @@ main = async () => {
                 planetsResidentsTableBody.innerText = '';
 
                 for (let elem of planetData[i]['residents']) {
+                    //console.log(planetData[i]['residents']);
+                    // console.log(elem)
+                    // console.log(linkPeople[elem]);
                     const newRow = document.createElement('tr');
                     let newCell = document.createElement('td');
 
@@ -314,7 +323,7 @@ main = async () => {
         planetsTable.appendChild(planetsTableHeader);
         planetsTableBody.innerHTML = '';
         for (let i = min_index; i < max_index; i++) {
-            console.log(planetData.length);
+            // console.log(planetData.length);
             const newRow = document.createElement('tr');
             let newCell = document.createElement('td');
 
@@ -353,7 +362,7 @@ main = async () => {
 
             newCell = document.createElement('td');
             newCell.innerText = planetData[i]['residents'].length + ' resident(s)';
-            console.log(newCell.innerText);
+            // console.log(newCell.innerText);
             if (newCell.innerText != '0 resident(s)') {
                 const buttonRes = document.createElement('button');
 
@@ -374,6 +383,9 @@ main = async () => {
                     planetsResidentsTableBody.innerText = '';
 
                     for (let elem of planetData[i]['residents']) {
+                        //console.log(planetData[i]['residents']);
+                        // console.log(elem)
+                        // console.log(linkPeople[elem]);
                         const newRow = document.createElement('tr');
                         let newCell = document.createElement('td');
 
@@ -526,7 +538,7 @@ main = async () => {
 
             newCell = document.createElement('td');
             newCell.innerText = planetData[i]['residents'].length + ' resident(s)';
-            console.log(newCell.innerText);
+            // console.log(newCell.innerText);
             if (newCell.innerText != '0 resident(s)') {
                 const buttonRes = document.createElement('button');
 
@@ -547,6 +559,9 @@ main = async () => {
                     planetsResidentsTableBody.innerText = '';
 
                     for (let elem of planetData[i]['residents']) {
+                       // console.log(planetData[i]['residents']);
+                       //  console.log(elem)
+                       //  console.log(linkPeople[elem]);
                         const newRow = document.createElement('tr');
                         let newCell = document.createElement('td');
 
